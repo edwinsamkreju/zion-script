@@ -1,3 +1,14 @@
 # Your first ZION SCRIPT program
-Say "Hello, world!"
-Say "Welcome to ZION SCRIPT."
+name be "ZION SCRIPT"
+show "Hello from " + name
+
+marks = 100
+if marks >= 90
+    show "Excellent work!"
+otherwise
+    show "Keep learning!"
+end if
+
+repeat 3 times
+    show "Learning Python-powered programming"
+end repeat
