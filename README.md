@@ -1,53 +1,59 @@
 # ZION SCRIPT
 
-**Simple language. Unlimited possibilities.**
+**Simple to read. Powered by Python.**
 
-ZION SCRIPT is an experimental, beginner-friendly programming language with simple English-inspired commands. It transpiles `.zion` source files into Python and runs the generated program.
+ZION SCRIPT is an experimental, beginner-friendly language with English-inspired commands. It transpiles .zion files into Python and uses Python's runtime and ecosystem.
 
-> Status: early prototype (v0.1.0). The syntax and implementation may change.
+> Status: early prototype (v0.1.0). The language is evolving; not every Python construct has a dedicated ZION spelling.
 
 ## Quick start
 
 Requires Python 3.10 or newer.
 
-```bash
+\`\`\`bash
 python -m zion run examples/hello.zion
 python -m zion transpile examples/hello.zion
-```
+python -m unittest discover -s tests -v
+\`\`\`
 
 ## Example
 
-```text
-Store 10 as number
+\`\`\`zion
+show "Hello, world!"
+marks be 100
+average = 85.5
 
-If number is greater than 5
-    Say "Hello from ZION!"
-Otherwise
-    Say "Keep learning!"
-End if
-```
+if marks >= 90
+    show "Excellent!"
+otherwise
+    show "Keep learning!"
+end if
 
-## Features in v0.1
+repeat 3 times
+    show "Hello again!"
+end repeat
+\`\`\`
 
-- Variables, output and input
-- Arithmetic and friendly comparison phrases
-- Conditions and repetition
-- Lists and for-each loops
-- Simple functions
-- Python transpilation and command-line interface
+## Language decisions
 
-See [docs/SYNTAX.md](docs/SYNTAX.md).
+- show replaces Say for output.
+- name be value assigns a variable.
+- name = value is also supported.
+- == compares values; = assigns values, matching Python.
+- Python arithmetic, comparison, boolean, bitwise, identity, membership and augmented-assignment operators are supported through Python-compatible expressions/statements.
+- Python imports, calls and statements can pass through the transpiler, providing access to installed libraries.
+- The original Store/Say syntax remains accepted for compatibility.
 
-## Tests
-
-```bash
-python -m unittest discover -s tests -v
-```
+See docs/SYNTAX.md for the syntax guide. The compiler uses a lexer, recursive-descent parser, AST, Python code generator and AST validation.
 
 ## Safety
 
 This prototype is not a secure sandbox. Generated Python has the same permissions as the Python process. Only run programs you trust.
 
+## Website
+
+The project landing page is in the website folder. See website/README.md for publishing guidance.
+
 ## License
 
-MIT. See [LICENSE](LICENSE).
+MIT. See LICENSE.
