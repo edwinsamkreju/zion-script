@@ -1,0 +1,9 @@
+Store 85 as marks
+
+If marks is greater than 90
+    Say "Excellent!"
+Otherwise if marks is greater than 75
+    Say "Very good!"
+Otherwise
+    Say "Keep practising!"
+End if
