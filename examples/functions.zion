@@ -1,0 +1,5 @@
+Create a function called greet
+    Say "Welcome to ZION SCRIPT!"
+End function
+
+Run greet
