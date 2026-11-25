@@ -1,4 +1,5 @@
-"""Recursive-descent parser for ZION SCRIPT v0.1."""
+"""Recursive-descent parser for ZION SCRIPT."""
+import ast
 import re
 from zion.ast_nodes import *
 from zion.errors import ZionError
@@ -30,10 +31,16 @@ class Parser:
             raise ZionError(f"Missing '{ending}' for the block that starts here.", opener.number)
         self.pos += 1
     def statement(self, indent):
-        line = self.lines[self.pos]; self.pos += 1; text = line.text
+        line = self.lines[self.pos]
+        self.pos += 1
+        text = line.text
         m = re.fullmatch(r"Store\s+(.+)\s+as\s+([A-Za-z_]\w*)", text, re.I)
         if m: return Store(m.group(2), m.group(1), line.number)
-        m = re.fullmatch(r"Say\s+(.+)", text, re.I)
+        m = re.fullmatch(r"([A-Za-z_]\w*)\s+be\s+(.+)", text, re.I)
+        if m: return Store(m.group(1), m.group(2), line.number)
+        if re.fullmatch(r"[A-Za-z_]\w*\s*=\s*(?!=).+", text):
+            return PythonStatement(text, line.number)
+        m = re.fullmatch(r"(?:Show|Say)\s+(.+)", text, re.I)
         if m: return Say(m.group(1), line.number)
         m = re.fullmatch(r'Ask\s+(.+?)\s+and\s+store\s+the\s+answer\s+as\s+([A-Za-z_]\w*)', text, re.I)
         if m:
@@ -55,11 +62,13 @@ class Parser:
         if re.match(r"If\s+", text, re.I): return self.parse_if(indent, line)
         m = re.fullmatch(r"Repeat\s+(.+)\s+times", text, re.I)
         if m:
-            body = self.nested(indent, {"End repeat"}, line); self.expect("End repeat", line)
+            body = self.nested(indent, {"End repeat"}, line)
+            self.expect("End repeat", line)
             return Repeat(m.group(1), body, line.number)
         m = re.fullmatch(r"For each\s+([A-Za-z_]\w*)\s+in\s+([A-Za-z_]\w*)", text, re.I)
         if m:
-            body = self.nested(indent, {"End for"}, line); self.expect("End for", line)
+            body = self.nested(indent, {"End for"}, line)
+            self.expect("End for", line)
             return ForEach(m.group(1), m.group(2), body, line.number)
         m = re.fullmatch(r"Create a list called\s+([A-Za-z_]\w*)", text, re.I)
         if m: return CreateList(m.group(1), line.number)
@@ -67,11 +76,17 @@ class Parser:
         if m: return AddToList(m.group(1), m.group(2), line.number)
         m = re.fullmatch(r"Create a function called\s+([A-Za-z_]\w*)", text, re.I)
         if m:
-            body = self.nested(indent, {"End function"}, line); self.expect("End function", line)
+            body = self.nested(indent, {"End function"}, line)
+            self.expect("End function", line)
             return Function(m.group(1), body, line.number)
         m = re.fullmatch(r"Run\s+([A-Za-z_]\w*)", text, re.I)
         if m: return RunFunction(m.group(1), line.number)
-        raise ZionError(f"I don't understand '{text}'. Check the command spelling or syntax.", line.number)
+        # Python statements and expressions pass through for ecosystem interoperability.
+        try:
+            ast.parse(text, mode="exec")
+        except SyntaxError as exc:
+            raise ZionError(f"I don't understand '{text}'. Check the command spelling or syntax.", line.number) from exc
+        return PythonStatement(text, line.number)
     def parse_if(self, indent, opener):
         condition = re.sub(r"^If\s+", "", opener.text, flags=re.I)
         branches = [(condition, self.nested(indent, {"Otherwise", "End if"}, opener))]
