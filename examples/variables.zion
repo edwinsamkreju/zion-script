@@ -1,0 +1,7 @@
+Store "Asha" as student
+Store 92 as marks
+
+Say "Student:"
+Say student
+Say "Marks:"
+Say marks
