@@ -8,6 +8,8 @@ class Store: name: str; value: str; line: int
 @dataclass
 class Say: value: str; line: int
 @dataclass
+class PythonStatement: source: str; line: int
+@dataclass
 class Ask: prompt: str; name: str; line: int
 @dataclass
 class Math: operation: str; left: str; right: str; line: int
