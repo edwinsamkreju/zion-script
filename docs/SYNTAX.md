@@ -1,63 +1,54 @@
 # ZION SCRIPT syntax (v0.1)
 
 ## Output and variables
-```text
-Say "Hello!"
-Store 42 as answer
-Say answer
-```
 
-## Input
-```text
-Ask "What is your name?" and store the answer as name
-Say name
-```
+Use show to display a value. Assign a variable with name be value or the familiar Python-style name = value form.
 
-## Arithmetic
-```text
-Add 4 and 5
-Subtract 3 from 10
-Multiply 6 and 7
-Divide 20 by 4
-Say result
-```
-Arithmetic commands place their answer in `result`.
+\`\`\`zion
+show "Hello!"
+answer be 42
+score = answer + 8
+show score
+\`\`\`
 
-## Conditions
-```text
-If score is greater than or equal to 50
-    Say "You passed"
-Otherwise
-    Say "Try again"
-End if
-```
+show replaces the older Say spelling. The old Say and Store value as name forms remain accepted for compatibility with early examples.
 
-## Repetition
-```text
-Repeat 3 times
-    Say "Hello"
-End repeat
-```
+## Operators and expressions
 
-## Lists
-```text
-Create a list called colours
-Add "Blue" to colours
-For each colour in colours
-    Say colour
-End for
-```
+ZION expressions use Python syntax and precedence. Supported operators include arithmetic (+ - * / // % **), comparisons (== != < <= > >=), boolean (and or not), bitwise (& | ^ ~ << >>), identity (is, is not), membership (in, not in), assignment operators (=, +=, -=, etc.), calls, attributes, indexing and slicing.
 
-## Functions
-```text
-Create a function called welcome
-    Say "Welcome!"
-End function
-Run welcome
-```
+\`\`\`zion
+base be 5
+power = base ** 3
+remainder = power % 4
+is_valid = power >= 100 and remainder != 0
+show is_valid
+\`\`\`
 
-## Comments
-A line beginning with `#` is a comment.
+Friendly comparison phrases are also supported in conditions, such as If score is greater than or equal to 50.
+
+## Conditions and repetition
+
+\`\`\`zion
+if score >= 50
+    show "You passed"
+otherwise
+    show "Try again"
+end if
+
+repeat 3 times
+    show "Hello"
+end repeat
+\`\`\`
+
+## Existing beginner commands
+
+The early prototype's Ask, list commands, For each, and simple no-argument function commands remain available.
+
+## Python interoperability
+
+Python-compatible statements such as import math, result = math.sqrt(81), and method calls can be used. The transpiler validates generated Python syntax but does not sandbox execution. Only run code you trust.
 
 ## Current limitations
-Function parameters, return values, list indexing and dictionary commands are not implemented yet. Expressions currently use Python expression syntax plus friendly comparison phrases. ZION is not an arbitrary natural-language parser.
+
+This is an early transpiler, not a fully independent reimplementation of Python. ZION-specific blocks currently cover conditions and repeat/foreach loops; advanced constructs can be supplied as Python-compatible statements where supported.
