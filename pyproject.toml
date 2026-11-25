@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zion-script"
+version = "0.1.0"
+description = "An English-inspired educational programming language transpiled to Python"
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+
+[project.scripts]
+zion = "zion.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["zion*"]
