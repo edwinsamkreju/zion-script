@@ -52,7 +52,7 @@ This prototype is not a secure sandbox. Generated Python has the same permission
 
 ## Website
 
-The project landing page is in the website folder. See website/README.md for publishing guidance.
+The landing page is in the repository root (index.html and styles.css), ready for GitHub Pages. The source copy is also in website/. To publish, open Settings → Pages, select Deploy from a branch, choose main and /(root), then save. Publishing must be enabled by a repository administrator.
 
 ## License
 
